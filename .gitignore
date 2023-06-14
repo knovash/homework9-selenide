@@ -1,0 +1,11 @@
+.idea
+target
+build
+log
+allure-results
+
+*.class
+*.log
+*.jar
+*.iml
+*.sh
