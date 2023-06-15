@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class SearchPage {
 
-    private SelenideElement searchButton = $(By.xpath("//a[@class='main-header__search-block']//*[name()='svg']"));
+    private SelenideElement searchButton = $(By.xpath("//*[@class='icon icn-search']"));
 
     private SelenideElement searchField = $(By.xpath("//input[@class='search-header__input']"));
 
