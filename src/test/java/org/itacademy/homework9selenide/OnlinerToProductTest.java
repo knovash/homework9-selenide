@@ -25,8 +25,9 @@ public class OnlinerToProductTest {
     @Description("Search item in catalog and compare first 10 items")
     @Test(testName = "CheckCompare", dataProvider = "itemsForSearch")
     public void onlnerCompareTest(String item) {
-        log.info("OPEN PAGE ONLINER.BY");
+        log.info("OPEN PAGE https://www.onliner.by/");
         open("https://www.onliner.by/");
+
         log.info("pageLoadTimeout: " + Configuration.pageLoadTimeout);
         log.info("timeout: " + Configuration.timeout);
         Configuration.pageLoadTimeout = 600000;
@@ -34,7 +35,6 @@ public class OnlinerToProductTest {
         log.info("pageLoadTimeout: " + Configuration.pageLoadTimeout);
         log.info("timeout: " + Configuration.timeout);
         WebDriver driver = getWebDriver();
-//        getWebDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(1));
         SelenideElement fastSearchInput = $(By.xpath("//input[@class='fast-search__input']"));
         log.info("DISPLAYED: " + fastSearchInput.isDisplayed());
         log.info("HTML: " + fastSearchInput.getAttribute("outerHTML"));
@@ -79,24 +79,6 @@ public class OnlinerToProductTest {
         log.info("TEXT product: " + product.text());
         product.click();
 
-
         log.info("--==TEST END==--");
-
-//        SelenideElement ppp = product.$(By.xpath("./*[@class='product-table__cell-inner product-table__cell-inner_overflow']"));
-////        log.info("DISPLAYED ppp: " + ppp.isDisplayed());
-//        log.info("HTML ppp: " + ppp.getAttribute("outerHTML"));
-//        log.info("TEXT ppp: " + ppp.text());
-////
-//        products.stream()
-////                .map(p -> p.$(By.xpath("./*[@class='button button_orange']")))
-////                .forEach(p -> log.info(p.getText()));
-//                .peek(p -> log.info(p.getAttribute("outerHTML")))
-//                .map(p -> p);
-
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-        }
     }
 }

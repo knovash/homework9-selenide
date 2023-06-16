@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Log4j2
-public class OnlinerCompareTest {
+public class OnlinerCompareTest extends BaseTest {
 
     @DataProvider()
     public Object[][] itemsForSearch() {
@@ -25,8 +25,9 @@ public class OnlinerCompareTest {
     @Description("Search item in catalog and compare first 10 items")
     @Test(testName = "CheckCompare", dataProvider = "itemsForSearch")
     public void onlnerCompareTest(String item) {
-        log.info("OPEN PAGE ONLINER.BY");
+        log.info("OPEN PAGE https://www.onliner.by/");
         open("https://www.onliner.by/");
+
         log.info("pageLoadTimeout: " + Configuration.pageLoadTimeout);
         log.info("timeout: " + Configuration.timeout);
         Configuration.pageLoadTimeout = 600000;
@@ -34,71 +35,46 @@ public class OnlinerCompareTest {
         log.info("pageLoadTimeout: " + Configuration.pageLoadTimeout);
         log.info("timeout: " + Configuration.timeout);
         WebDriver driver = getWebDriver();
-//        getWebDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(1));
-        SelenideElement fastSearchInput = $(By.xpath("//input[@class='fast-search__input']"));
-        log.info("DISPLAYED: " + fastSearchInput.isDisplayed());
-        log.info("HTML: " + fastSearchInput.getAttribute("outerHTML"));
 
+        SelenideElement fastSearchInput = $(By.xpath("//input[@class='fast-search__input']"));
         fastSearchInput.setValue(item);
+        log.info("VALUE fastSearchInput: " + fastSearchInput.getValue());
 
         SelenideElement frame = $(By.xpath("//iframe[@class='modal-iframe']"));
         driver.switchTo().frame(frame);
 
-        SelenideElement checkBox = $(By.xpath("//*[@class='i-checkbox__faux']"));
-        checkBox.shouldBe(visible);
-////        SelenideElement checkBox = $(By.xpath("//input[@class='i-checkbox__real']"));
-        log.info("DISPLAYED: " + checkBox.isDisplayed());
-        log.info("HTML: " + checkBox.getAttribute("outerHTML"));
-//        checkBox.click();
-////        checkBox.setSelected(true);
-
         ElementsCollection checkBoxes = $$(By.xpath("//*[@class='i-checkbox__faux']"));
-
         checkBoxes.stream().forEach(box -> box.click());
 
-        $(By.xpath("//div[@class='compare-button compare-button_visible']")).shouldBe(visible);
         SelenideElement buttonCompare = $(By.xpath("//div[@class='compare-button compare-button_visible']"));
+        buttonCompare.shouldBe(visible);
         buttonCompare.click();
 
-        $(By.xpath("//*[@class='b-offers-title']")).shouldBe(visible);
-
         SelenideElement titleCompare = $(By.xpath("//*[@class='b-offers-title']"));
-
-        log.info("DISPLAYED title: " + titleCompare.isDisplayed());
-        log.info("HTML title: " + titleCompare.getAttribute("outerHTML"));
+        titleCompare.shouldBe(visible);
         log.info("TEXT title: " + titleCompare.text());
 
         SelenideElement orange = $(By.xpath("//*[@class='button button_orange']"));
-        log.info("DISPLAYED orange: " + orange.isDisplayed());
-        log.info("HTML orange: " + orange.getAttribute("outerHTML"));
+        orange.shouldBe(visible);
         log.info("TEXT orange: " + orange.text());
 
         ElementsCollection products = $$(By.xpath("//*[@class='product-table__cell']"));
-//        ElementsCollection products = $$(By.xpath("//*[@class='product-table-cell-container']"));
 
         SelenideElement product = products.get(2);
-        log.info("DISPLAYED product: " + product.isDisplayed());
         log.info("HTML product: " + product.getAttribute("outerHTML"));
         log.info("TEXT product: " + product.text());
 
-        log.info("FIND product: " + product.find("product-table__cell-inner product-table__cell-inner_overflow").text());
+// неработает
+        SelenideElement ppp = product.$(By.xpath("./*[@class='product-table__cell-inner product-table__cell-inner_overflow']"));
+        log.info("HTML ppp: " + ppp.getAttribute("outerHTML"));
+        log.info("TEXT ppp: " + ppp.text());
 
-
-//        SelenideElement ppp = product.$(By.xpath("./*[@class='product-table__cell-inner product-table__cell-inner_overflow']"));
-////        log.info("DISPLAYED ppp: " + ppp.isDisplayed());
-//        log.info("HTML ppp: " + ppp.getAttribute("outerHTML"));
-//        log.info("TEXT ppp: " + ppp.text());
-////
 //        products.stream()
-////                .map(p -> p.$(By.xpath("./*[@class='button button_orange']")))
-////                .forEach(p -> log.info(p.getText()));
+//                .map(p -> p.$(By.xpath("./*[@class='button button_orange']")))
+//                .forEach(p -> log.info(p.getText()));
 //                .peek(p -> log.info(p.getAttribute("outerHTML")))
 //                .map(p -> p);
 
-
-        try {
-            Thread.sleep(8000);
-        } catch (InterruptedException e) {
-        }
+        log.info("--==TEST END==--");
     }
 }

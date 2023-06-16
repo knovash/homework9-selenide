@@ -1,8 +1,15 @@
 package org.itacademy.homework9selenide;
 
+import com.codeborne.selenide.Configuration;
 import lombok.extern.log4j.Log4j2;
 import org.itacademy.homework9selenide.utils.Config;
+import org.itacademy.homework9selenide.utils.WaitUtils;
+import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
+
+import java.time.Duration;
+
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Log4j2
 public class BaseTest {
@@ -25,7 +32,8 @@ public class BaseTest {
 
     @AfterClass
     public void afterclass() {
-        log.info("AFTER CLASS do nothing");
+        log.info("AFTER CLASS wait 10 sec");
+        WaitUtils.waitSeconds(10);
     }
 
     @AfterTest

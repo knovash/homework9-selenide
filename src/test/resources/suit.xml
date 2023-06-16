@@ -6,7 +6,7 @@
     </listeners>
     <test name="Test 1">
         <classes>
-<!--            <class name="org.itacademy.homework9selenide.PureSelenideTest"/>-->
+            <class name="org.itacademy.homework9selenide.PureSelenideTest"/>
             <class name="org.itacademy.homework9selenide.SearchTest"/>
         </classes>
     </test>
