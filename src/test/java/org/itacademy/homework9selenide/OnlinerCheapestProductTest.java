@@ -11,11 +11,10 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
 
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Log4j2
@@ -37,7 +36,7 @@ public class OnlinerCheapestProductTest extends BaseTest {
 
         SelenideElement fastSearchInput = $(By.xpath("//input[@class='fast-search__input']"));
         WaitUtils.waitForVisibility(fastSearchInput, 900);
-        fastSearchInput.setValue(item);
+        fastSearchInput.setValue("iphone 12");
         log.info("VALUE fastSearchInput: " + fastSearchInput.getValue());
 
         SelenideElement frame = $(By.xpath("//iframe[@class='modal-iframe']"));
@@ -45,69 +44,38 @@ public class OnlinerCheapestProductTest extends BaseTest {
         driver.switchTo().frame(frame);
 
         WaitUtils.waitForVisibility($(By.xpath("//*[@class='search__result']")), 900);
-        ElementsCollection searchResults = $$(By.xpath("//div[@class='result__item result__item_product']"));
+        ElementsCollection searchResults = $$(By.xpath("//div[@class='product__price']//span"));
 
-        SelenideElement result1 = searchResults.get(1);
-        log.info("\nTILE: " + result1.$(By.className("product__title")).getText());
-//        log.info("\nRESULT html: " + result.$(By.className("product__price")).getAttribute("outerHTML"));
-//        SelenideElement productPrice = result.$(By.className("product__price")); // работает
-//        SelenideElement productPrice = result.$("span"); // работает
-//        SelenideElement productPrice = result.$(By.tagName("span")); // работает
-        SelenideElement productPrice = result1.$(By.xpath(".//span")); // работает
-        log.info("\nRESULT html: " + productPrice.getAttribute("outerHTML"));
-        log.info("\nRESULT html: " + productPrice.getText());
+        log.info("FIND CHEPEST PRODUCT...");
+        SelenideElement cheapestProduct = findCheapestProduct(searchResults);
 
+        SelenideElement title = cheapestProduct.$(By.xpath(".//div[@class='product__title']"));
+        String titleText = title.getText();
+        log.info("TITLE TEXT: " + titleText);
+        SelenideElement price = cheapestProduct.$(By.xpath(".//div[@class='product__price']//span"));
+        String priceText = price.getText();
+        log.info("PRICE TEXT: " + priceText);
 
-//        searchResults
-//                .stream()
-////                .peek(result -> log.info("\nTITLE: " + result.$(By.className("product__title")).getText()))
-//                .peek(result -> log.info("\nTITLE: " + result.$(By.xpath(".//div[@class='product__title']")).getText()))
-//                .peek(result -> log.info("\nPRICE: " + result.$(By.xpath(".//*[@class='product__price']//span")).getAttribute("outerHTML")))
-//                .peek(result -> log.info("\nPRICE: " + result.$(By.xpath(".//*[@class='product__price']//span")).getText()))
-//                .forEach(result -> log.info("---------"));
+    }
 
-//        Double
+    private SelenideElement findCheapestProduct(ElementsCollection productPrices) {
+        log.info("SIZE " + productPrices.size());
+        double lowestPrice = Double.MAX_VALUE;
+        SelenideElement cheapestProduct = null;
 
-        Comparator<Double> ccc = new Comparator<Double>() {
-            @Override
-            public int compare(Double doc1, Double doc2) {
-                return doc1.compareTo(doc2);
+        for (SelenideElement productPrice : productPrices) {
+            log.info("PRICE TEXT: " + productPrice.getText());
+            String priceText = productPrice.getText()
+                    .replace(" р.", "")
+                    .replace(",", ".");
+            double price = Double.parseDouble(priceText);
+            log.info("PRICE DOUBLE: " + price);
+            if (price < lowestPrice) {
+                lowestPrice = price;
+                cheapestProduct = productPrice.closest("div[contains(@class,'result__wrapper')]");
             }
-        };
-
-        Comparator<SelenideElement> sel = new Comparator<SelenideElement>() {
-            @Override
-            public int compare(SelenideElement element1, SelenideElement element2) {
-                return convert(element1).compareTo(convert(element2));
-            }
-
-            public Double convert(SelenideElement element){
-                String priceText = element.$(By.xpath(".//*[@class='product__price']//span")).getText();
-                priceText = priceText.replace(" р.", "");
-                priceText = priceText.replace(",", ".");
-                Double priceDouble = Double.valueOf(priceText);
-                return priceDouble;
-            }
-
-
-        };
-
-
-        SelenideElement minPriceElement =
-        searchResults
-                .stream()
-                        .min(sel)
-                                .get();
-////
-
-//        log.info("MIN PRICE DOUBLE: " + minPrice);
-
-        log.info("MIN PRICE DOUBLE: " + minPriceElement.$(By.xpath(".//div[@class='product__title']")).getText());
-        log.info("MIN PRICE DOUBLE: " + minPriceElement.$(By.xpath(".//*[@class='product__price']//span")).getText());
-
-
-
-        WaitUtils.waitSeconds(5);
-        log.info("--==TEST END==--");
+            log.info("PRICE LOWEST: " + lowestPrice);
+        }
+        return cheapestProduct;
     }
 }

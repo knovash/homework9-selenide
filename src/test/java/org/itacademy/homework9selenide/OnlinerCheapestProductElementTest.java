@@ -45,18 +45,11 @@ public class OnlinerCheapestProductElementTest extends BaseTest {
             public int compare(SelenideElement element1, SelenideElement element2) {
                 return getPrice(element1).compareTo(getPrice(element2));
             }
-
-            public Double getPrice(SelenideElement element) {
-                String priceText = element.$(By.xpath(".//*[@class='product__price']//span")).getText();
-                priceText = priceText.replace(" р.", "");
-                priceText = priceText.replace(",", ".");
-                Double priceDouble = Double.valueOf(priceText);
-                return priceDouble;
-            }
         };
 
         SelenideElement minPriceElement = searchResults
                 .stream()
+                .peek(element -> log.info("PRICE: " + getPrice(element)))
                 .min(priceComparator)
                 .get();
 
@@ -65,5 +58,13 @@ public class OnlinerCheapestProductElementTest extends BaseTest {
         log.info("PRICE: " + minPriceElement.$(By.xpath(".//div[@class='product__price']//span")).getText());
         WaitUtils.waitSeconds(5);
         log.info("--==TEST END==--");
+    }
+
+    public Double getPrice(SelenideElement element) {
+        String priceText = element.$(By.xpath(".//*[@class='product__price']//span")).getText();
+        priceText = priceText.replace(" р.", "");
+        priceText = priceText.replace(" ", "");
+        priceText = priceText.replace(",", ".");
+        return Double.valueOf(priceText);
     }
 }
