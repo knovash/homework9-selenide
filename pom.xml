@@ -83,6 +83,13 @@
             <artifactId>allure-java-commons</artifactId>
             <version>${qameta-allure-version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-selenide -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-selenide</artifactId>
+            <version>${qameta-allure-version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

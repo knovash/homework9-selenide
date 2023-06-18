@@ -1,15 +1,15 @@
 package org.itacademy.homework9selenide;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import io.qameta.allure.selenide.LogType;
 import lombok.extern.log4j.Log4j2;
 import org.itacademy.homework9selenide.utils.Config;
 import org.itacademy.homework9selenide.utils.WaitUtils;
-import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
 
-import java.time.Duration;
-
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import java.util.logging.Level;
 
 @Log4j2
 public class BaseTest {
@@ -22,22 +22,29 @@ public class BaseTest {
 
     @BeforeClass
     public void beforeclass() {
-        log.info("BEFORE CLASS do nothing");
+        log.info("BEFORE CLASS");
+        SelenideLogger.addListener("allure", new AllureSelenide()
+                .screenshots(true)
+                .savePageSource(true)
+                .enableLogs(LogType.BROWSER, Level.ALL));
+
+        Configuration.pageLoadTimeout = 1000000;
+        Configuration.timeout = 1000000;
     }
 
     @AfterMethod
     public void aftermethod() {
-        log.info("AFTER METHOD do nothing");
+        log.info("AFTER METHOD");
     }
 
     @AfterClass
     public void afterclass() {
-        log.info("AFTER CLASS wait 10 sec");
-        WaitUtils.waitSeconds(10);
+        log.info("AFTER CLASS");
+
     }
 
     @AfterTest
     public void aftertest() {
-        log.info("AFTER TEST do nothing");
+        log.info("AFTER TEST");
     }
 }

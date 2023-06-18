@@ -4,12 +4,14 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Description;
 import lombok.extern.log4j.Log4j2;
+import org.itacademy.homework9selenide.utils.WaitUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
@@ -25,28 +27,25 @@ public class OnlinerBuyTest extends BaseTest {
     public void onlnerCompareTest() {
         log.info("OPEN PAGE https://catalog.onliner.by/mobile/apple/iphone14");
         open("https://catalog.onliner.by/mobile/apple/iphone14");
-
-        log.info("pageLoadTimeout: " + Configuration.pageLoadTimeout);
-        log.info("timeout: " + Configuration.timeout);
-        Configuration.pageLoadTimeout = 600000;
-        Configuration.timeout = 600000;
-        log.info("pageLoadTimeout: " + Configuration.pageLoadTimeout);
-        log.info("timeout: " + Configuration.timeout);
         WebDriver driver = getWebDriver();
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+        driver.manage().timeouts().pageLoadTimeout(600L, TimeUnit.SECONDS);
 
         SelenideElement title = $(By.xpath("//*[@class='catalog-masthead__title js-nav-header']"));
+        WaitUtils.waitForVisibility(title, 600);
+
         title.shouldBe(visible);
         log.info("DISPLAYED title: " + title.isDisplayed());
         log.info("HTML title: " + title.getAttribute("outerHTML"));
         log.info("TEXT title: " + title.text());
 
         SelenideElement buttonBuyNow = $(By.xpath("//*[@class='button-style button-style_adscititious button-style_base-alter product-aside__button product-aside__button_narrow product-aside__button_buy']"));
+        WaitUtils.waitForVisibility(buttonBuyNow, 900);
         log.info("DISPLAYED buttonBuyNow: " + buttonBuyNow.isDisplayed());
         log.info("TEXT buttonBuyNow: " + buttonBuyNow.text());
         buttonBuyNow.click();
 
         SelenideElement inputCity = $(By.xpath("//input[@placeholder='Укажите населенный пункт']"));
+        WaitUtils.waitForVisibility(inputCity, 900);
         log.info("TEXT inputCity: " + inputCity.getValue());
         // кнопка очистить ненажимается
         SelenideElement clearCity = $(By.xpath("//input[@placeholder='Укажите населенный пункт']/following-sibling::div"));

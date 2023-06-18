@@ -10,6 +10,8 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -27,14 +29,8 @@ public class OnlinerCompareTest extends BaseTest {
     public void onlnerCompareTest(String item) {
         log.info("OPEN PAGE https://www.onliner.by/");
         open("https://www.onliner.by/");
-
-        log.info("pageLoadTimeout: " + Configuration.pageLoadTimeout);
-        log.info("timeout: " + Configuration.timeout);
-        Configuration.pageLoadTimeout = 600000;
-        Configuration.timeout = 600000;
-        log.info("pageLoadTimeout: " + Configuration.pageLoadTimeout);
-        log.info("timeout: " + Configuration.timeout);
         WebDriver driver = getWebDriver();
+        driver.manage().timeouts().pageLoadTimeout(600L, TimeUnit.SECONDS);
 
         SelenideElement fastSearchInput = $(By.xpath("//input[@class='fast-search__input']"));
         fastSearchInput.setValue(item);
@@ -64,7 +60,7 @@ public class OnlinerCompareTest extends BaseTest {
         log.info("HTML product: " + product.getAttribute("outerHTML"));
         log.info("TEXT product: " + product.text());
 
-// неработает
+// TODO неработает
         SelenideElement ppp = product.$(By.xpath("./*[@class='product-table__cell-inner product-table__cell-inner_overflow']"));
         log.info("HTML ppp: " + ppp.getAttribute("outerHTML"));
         log.info("TEXT ppp: " + ppp.text());

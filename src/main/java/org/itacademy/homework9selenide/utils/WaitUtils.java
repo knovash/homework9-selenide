@@ -1,5 +1,6 @@
 package org.itacademy.homework9selenide.utils;
 
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -10,7 +11,7 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class WaitUtils {
 
-    public static void waitForVisibility(WebElement element, int seconds) {
+    public static void waitForVisibility(SelenideElement element, int seconds) {
         new WebDriverWait(getWebDriver(), Duration.ofSeconds(seconds))
                 .until(ExpectedConditions.visibilityOf(element));
     }
