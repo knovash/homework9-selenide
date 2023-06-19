@@ -7,28 +7,21 @@ import lombok.extern.log4j.Log4j2;
 import org.itacademy.homework9selenide.utils.WaitUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Log4j2
 @Listeners
-public class OnlinerCheapestProductTest extends BaseTest {
-
-    @DataProvider()
-    public Object[][] itemsForSearch() {
-        return new Object[][]{{"iphone 12"}};
-    }
+public class OnlinerCheapestProductClosestTest extends BaseTest {
 
     @Description("Search item in catalog and compare first 10 items")
-    @Test(testName = "CheckCompare", dataProvider = "itemsForSearch")
-    public void onlnerCompareTest(String item) {
+    @Test(testName = "CheckCompare")
+    public void onlnerCompareTest() {
         log.info("OPEN PAGE https://www.onliner.by/");
         open("https://www.onliner.by/");
         WebDriver driver = getWebDriver();

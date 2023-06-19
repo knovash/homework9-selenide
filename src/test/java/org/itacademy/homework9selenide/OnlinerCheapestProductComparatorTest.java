@@ -18,7 +18,7 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Log4j2
 @Listeners
-public class OnlinerCheapestProductElementTest extends BaseTest {
+public class OnlinerCheapestProductComparatorTest extends BaseTest {
 
     @Description("Search item in catalog and compare first 10 items")
     @Test(testName = "CheckCompare")
@@ -38,33 +38,52 @@ public class OnlinerCheapestProductElementTest extends BaseTest {
         driver.switchTo().frame(frame);
 
         WaitUtils.waitForVisibility($(By.xpath("//*[@class='search__result']")), 900);
-        ElementsCollection searchResults = $$(By.xpath("//div[@class='result__item result__item_product']"));
 
         Comparator<SelenideElement> priceComparator = new Comparator<SelenideElement>() {
             @Override
             public int compare(SelenideElement element1, SelenideElement element2) {
-                return getPrice(element1).compareTo(getPrice(element2));
+                return getPriceDouble(element1).compareTo(getPriceDouble(element2));
             }
         };
 
+        ElementsCollection searchResults = $$(By.xpath("//div[@class='result__item result__item_product']"));
         SelenideElement minPriceElement = searchResults
                 .stream()
-                .peek(element -> log.info("PRICE: " + getPrice(element)))
                 .min(priceComparator)
                 .get();
 
         log.info("MIN PRICE ELEMENT");
         log.info("TITLE: " + minPriceElement.$(By.xpath(".//div[@class='product__title']")).getText());
         log.info("PRICE: " + minPriceElement.$(By.xpath(".//div[@class='product__price']//span")).getText());
+
+        SelenideElement buttonOrange = minPriceElement.$(By.xpath(".//*[@class='button button_orange product__button']"));
+        WaitUtils.waitForVisibility(buttonOrange, 900);
+        buttonOrange.click();
+
         WaitUtils.waitSeconds(5);
+        SelenideElement popover = $(By.xpath("//*[contains(text(), 'Все ясно, спасибо')]"));
+        WaitUtils.waitForVisibility(popover, 30);
+        if (popover.isDisplayed()) {
+            popover.click();
+        }
+
+        WaitUtils.waitSeconds(5);
+        SelenideElement popover2 = $(By.xpath("//*[contains(text(), 'Ваш населенный пункт')]"));
+        if (popover2.isDisplayed()) {
+            log.info("Ваш населенный пункт");
+            $(By.xpath("//*[contains(text(), 'Ваш населенный пункт')]")).click();
+        }
+
+        WaitUtils.waitSeconds(20);
         log.info("--==TEST END==--");
     }
 
-    public Double getPrice(SelenideElement element) {
+    public Double getPriceDouble(SelenideElement element) {
         String priceText = element.$(By.xpath(".//*[@class='product__price']//span")).getText();
-        priceText = priceText.replace(" р.", "");
-        priceText = priceText.replace(" ", "");
-        priceText = priceText.replace(",", ".");
+        priceText = priceText
+                .replace(" р.", "")
+                .replace(" ", "")
+                .replace(",", ".");
         return Double.valueOf(priceText);
     }
 }
