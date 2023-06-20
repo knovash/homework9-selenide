@@ -3,6 +3,7 @@ package org.itacademy.homework9selenide.steps;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import lombok.extern.log4j.Log4j2;
+import org.itacademy.homework9selenide.pages.Element;
 import org.itacademy.homework9selenide.pages.OnlinerPage;
 import org.itacademy.homework9selenide.utils.PriceUtils;
 import org.itacademy.homework9selenide.utils.WaitUtils;
@@ -16,6 +17,8 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 public class CheapestSteps {
 
     private OnlinerPage onlinerPage;
+
+
 
     @Step("input Search Value")
     public void inputSearchValue() {
@@ -69,7 +72,11 @@ public class CheapestSteps {
     @Step("go To Product Page")
     public void goToProductPage(SelenideElement minPriceElement) {
         log.info("go To Product Page");
+
+//        Element el = new Element(minPriceElement);
         SelenideElement title = minPriceElement.$(By.xpath(".//*[@class='product__title-link']"));
+//        SelenideElement title = el.ElementTitle;
+
         WaitUtils.waitForVisibility(title, 60);
         title.click();
         SelenideElement productTitle = onlinerPage.productTitle;
