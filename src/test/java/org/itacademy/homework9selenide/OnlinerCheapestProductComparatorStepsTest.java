@@ -5,7 +5,6 @@ import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Description;
 import lombok.extern.log4j.Log4j2;
 import org.itacademy.homework9selenide.steps.CheapestSteps;
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -26,21 +25,19 @@ public class OnlinerCheapestProductComparatorStepsTest extends BaseTest {
     public void onlinerMinPriceTest() {
         Configuration.pageLoadTimeout = 30000;
         Configuration.timeout = 30000;
+        log.info("OPEN https://www.onliner.by/");
         open("https://www.onliner.by/");
-        getWebDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+//        getWebDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
 
         cheapestSteps.inputSearchValue();
-        cheapestSteps.switchToFrame();
-        SelenideElement minPriceElement = cheapestSteps.getCheapest();
-        String cheapestTitle = minPriceElement.$(By.xpath(".//div[@class='product__title']")).getText();
-        String cheapestPrice = minPriceElement.$(By.xpath(".//div[@class='product__price']//span")).getText();
-        log.info("MIN PRICE ELEMENT");
-        log.info("TITLE: " + cheapestTitle);
-        log.info("PRICE: " + cheapestPrice);
+        cheapestSteps.switchToResultsFrame();
+        SelenideElement cheapestProductElement = cheapestSteps.getCheapestProductElement();
+        String cheapestTitle = cheapestSteps.getCheapestTitleText(cheapestProductElement);
+        String cheapestPrice = cheapestSteps.getCheapestPriceText(cheapestProductElement);
 
-        cheapestSteps.goToProductPage(minPriceElement);
-        cheapestSteps.addToBasket();
-        cheapestSteps.goToBasket();
+        cheapestSteps.goToProductPage(cheapestProductElement);
+        cheapestSteps.addProductToBasket();
+        cheapestSteps.goToBasketPage();
 
         String basketTitle = cheapestSteps.getBasketProductTitle();
         String basketPrice = cheapestSteps.getBasketProductPrice();

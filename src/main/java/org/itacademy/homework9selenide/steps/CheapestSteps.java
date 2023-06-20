@@ -20,25 +20,24 @@ public class CheapestSteps {
         onlinerPage = new OnlinerPage();
     }
 
-    @Step("Click search button for show search field")
+    @Step("input Search Value")
     public void inputSearchValue() {
         log.info("input Search Value = iphone 12");
         WaitUtils.waitForVisibility(onlinerPage.fastSearchInput, 60);
         onlinerPage.fastSearchInput.setValue("iphone 12");
-        log.info("VALUE fastSearchInput: " + onlinerPage.fastSearchInput.getValue());
     }
 
-    @Step("Click search button for show search field")
-    public void switchToFrame() {
-        log.info("switch To Frame");
+    @Step("switch To Results Frame")
+    public void switchToResultsFrame() {
+        log.info("switch To Results Frame");
         SelenideElement frame = onlinerPage.frame;
         getWebDriver().switchTo().frame(frame);
         WaitUtils.waitForVisibility(frame, 60);
     }
 
-    @Step("Click search button for show search field")
-    public SelenideElement getCheapest() {
-        log.info("getCheapest");
+    @Step("get Cheapest Product Element")
+    public SelenideElement getCheapestProductElement() {
+        log.info("get Cheapest Product Element");
 
         Comparator<SelenideElement> priceComparator = new Comparator<SelenideElement>() {
             @Override
@@ -47,15 +46,12 @@ public class CheapestSteps {
             }
         };
 
-        SelenideElement minPriceElement = onlinerPage.searchResults
+        return onlinerPage.searchResults
                 .stream()
                 .sorted(priceComparator)
                 .peek(element -> log.info(getPriceDouble(element)))
                 .min(priceComparator)
                 .get();
-
-        log.info("switch ok");
-        return minPriceElement;
     }
 
     public Double getPriceDouble(SelenideElement element) {
@@ -67,39 +63,53 @@ public class CheapestSteps {
         return Double.valueOf(priceText);
     }
 
-    @Step("Click search button for show search field")
+    @Step("get Cheapest Title Text")
+    public String getCheapestTitleText(SelenideElement minPriceElement) {
+        String cheapestTitle = minPriceElement.$(By.xpath(".//div[@class='product__title']")).getText();
+        log.info("get Cheapest Title Text: " + cheapestTitle);
+        return cheapestTitle;
+    }
+
+    @Step("get Cheapest Price Text")
+    public String getCheapestPriceText(SelenideElement minPriceElement) {
+        String cheapestPrice = minPriceElement.$(By.xpath(".//div[@class='product__price']//span")).getText();
+        log.info("get Cheapest Price Text: " + cheapestPrice);
+        return cheapestPrice;
+    }
+
+    @Step("go To Product Page")
     public void goToProductPage(SelenideElement minPriceElement) {
-        log.info("goToProductPage");
+        log.info("go To Product Page");
         SelenideElement title = minPriceElement.$(By.xpath(".//*[@class='product__title-link']"));
         WaitUtils.waitForVisibility(title, 900);
         title.click();
         SelenideElement productTitle = onlinerPage.productTitle;
         WaitUtils.waitForVisibility(productTitle, 60);
-        log.info("TITLE TEXT " + productTitle.getText());
+        log.info("product Page Title Text: " + productTitle.getText());
     }
 
-    @Step("Click search button for show search field")
-    public void addToBasket() {
+    @Step("add Product To Basket")
+    public void addProductToBasket() {
         SelenideElement tobasket = onlinerPage.tobasket;
         WaitUtils.waitForVisibility(tobasket, 60);
-        log.info("CLICK В корзину\n" + tobasket.isDisplayed());
+        log.info("add Product To Basket: " + tobasket.isDisplayed());
         tobasket.click();
     }
 
-    @Step("Click search button for show search field")
-    public void goToBasket() {
+    @Step("go To Basket Page")
+    public void goToBasketPage() {
         SelenideElement goToBasket = onlinerPage.goToBasket;
         WaitUtils.waitForVisibility(goToBasket, 60);
-        log.info("CLICK Перейти в корзину\n" + goToBasket.isDisplayed());
+        log.info("go To Basket Page: " + goToBasket.isDisplayed());
         goToBasket.click();
     }
 
-    @Step("Click search button for show search field")
+    @Step("get Basket Product Title")
     public String getBasketProductTitle() {
         return onlinerPage.inBasketItems.get(0).$(By.xpath(".//a[contains(@class,'cart-form__link_base-alter')]")).getText();
     }
 
-    @Step("Click search button for show search field")
+    @Step("get Basket Product Price")
     public String getBasketProductPrice() {
         return onlinerPage.inBasketItems.get(0).$(By.xpath(".//div[contains(@class,'cart-form__offers-part_price_specific')]")).getText();
     }
