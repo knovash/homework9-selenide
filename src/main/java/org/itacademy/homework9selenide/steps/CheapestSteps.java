@@ -32,7 +32,7 @@ public class CheapestSteps {
     @Step("switch To Frame")
     public void switchToFrame() {
         log.info("switch To Frame");
-        SelenideElement frame = $(By.xpath("//iframe[@class='modal-iframe']"));
+        SelenideElement frame = onlinerPage.frame;
         WaitUtils.waitForVisibility(frame, 60);
         getWebDriver().switchTo().frame(frame);
     }
