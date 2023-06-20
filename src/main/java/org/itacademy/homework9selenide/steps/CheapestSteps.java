@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 
 import java.util.Comparator;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Log4j2
@@ -27,17 +28,16 @@ public class CheapestSteps {
         onlinerPage.fastSearchInput.setValue("iphone 12");
     }
 
-    @Step("switch To Results Frame")
-    public void switchToResultsFrame() {
-        log.info("switch To Results Frame");
-        SelenideElement frame = onlinerPage.frame;
-        getWebDriver().switchTo().frame(frame);
+    @Step("switch To Frame")
+    public void switchToFrame() {
+        log.info("switch To Frame");
+        SelenideElement frame = $(By.xpath("//iframe[@class='modal-iframe']"));
         WaitUtils.waitForVisibility(frame, 60);
+        getWebDriver().switchTo().frame(frame);
     }
 
     @Step("get Cheapest Product Element")
     public SelenideElement getCheapestProductElement() {
-        log.info("get Cheapest Product Element");
 
         Comparator<SelenideElement> priceComparator = new Comparator<SelenideElement>() {
             @Override
@@ -46,6 +46,9 @@ public class CheapestSteps {
             }
         };
 
+        log.info("get Cheapest Product Element");
+        WaitUtils.waitForVisibility(onlinerPage.searchResults.get(0), 60);
+        log.info("SIZE " + onlinerPage.searchResults.size());
         return onlinerPage.searchResults
                 .stream()
                 .sorted(priceComparator)

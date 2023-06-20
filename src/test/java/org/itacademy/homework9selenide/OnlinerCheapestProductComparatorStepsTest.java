@@ -27,21 +27,19 @@ public class OnlinerCheapestProductComparatorStepsTest extends BaseTest {
         Configuration.timeout = 30000;
         log.info("OPEN https://www.onliner.by/");
         open("https://www.onliner.by/");
-//        getWebDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+        cheapestSteps = new CheapestSteps();
+        getWebDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
 
         cheapestSteps.inputSearchValue();
-        cheapestSteps.switchToResultsFrame();
+        cheapestSteps.switchToFrame();
         SelenideElement cheapestProductElement = cheapestSteps.getCheapestProductElement();
         String cheapestTitle = cheapestSteps.getCheapestTitleText(cheapestProductElement);
         String cheapestPrice = cheapestSteps.getCheapestPriceText(cheapestProductElement);
-
         cheapestSteps.goToProductPage(cheapestProductElement);
         cheapestSteps.addProductToBasket();
         cheapestSteps.goToBasketPage();
-
         String basketTitle = cheapestSteps.getBasketProductTitle();
         String basketPrice = cheapestSteps.getBasketProductPrice();
-
         log.info("PRICE COMPARE " + cheapestPrice + " = " + basketPrice + "  " + cheapestPrice.contains(basketPrice));
         log.info("TITLE COMPARE " + cheapestTitle + " = " + basketTitle + "  " + cheapestTitle.contains(basketTitle));
         Assert.assertTrue(cheapestPrice.contains(basketPrice) && cheapestTitle.contains(basketTitle));

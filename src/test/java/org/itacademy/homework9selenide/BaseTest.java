@@ -24,9 +24,10 @@ public class BaseTest {
     public void beforeclass() {
         log.info("BEFORE CLASS");
         SelenideLogger.addListener("allure", new AllureSelenide()
-                .screenshots(true)
                 .savePageSource(true)
-                .enableLogs(LogType.BROWSER, Level.ALL));
+//                .enableLogs(LogType.BROWSER, Level.ALL)
+                .screenshots(true)
+        );
 
         Configuration.pageLoadTimeout = 1000000;
         Configuration.timeout = 1000000;
@@ -46,6 +47,6 @@ public class BaseTest {
     @AfterTest
     public void aftertest() {
         log.info("AFTER TEST");
-        WaitUtils.waitSeconds(20);
+        WaitUtils.waitSeconds(5);
     }
 }
