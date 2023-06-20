@@ -20,7 +20,7 @@ public class OnlinerCheapestProductTest extends BaseTest {
     private CheapestSteps cheapestSteps;
 
     @Description("Find cheapest product and add to basket")
-    @Test(testName = "CheapestProduct")
+    @Test()
     public void cheapestProductTest() {
         log.info("OPEN https://www.onliner.by/");
         open("https://www.onliner.by/");

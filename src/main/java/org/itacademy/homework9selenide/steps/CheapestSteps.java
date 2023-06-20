@@ -17,10 +17,6 @@ public class CheapestSteps {
 
     private OnlinerPage onlinerPage;
 
-    public CheapestSteps() {
-        onlinerPage = new OnlinerPage();
-    }
-
     @Step("input Search Value")
     public void inputSearchValue() {
         log.info("input Search Value = iphone 12");
@@ -51,7 +47,6 @@ public class CheapestSteps {
         log.info("SIZE " + onlinerPage.searchResults.size());
         return onlinerPage.searchResults
                 .stream()
-                .sorted(priceComparator)
                 .peek(element -> log.info(PriceUtils.getPriceDouble(element)))
                 .min(priceComparator)
                 .get();

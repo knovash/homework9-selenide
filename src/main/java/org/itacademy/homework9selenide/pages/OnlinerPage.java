@@ -23,4 +23,6 @@ public class OnlinerPage {
 
     public ElementsCollection inBasketItems = $$(By.xpath("//div[@class='cart-form__offers-unit cart-form__offers-unit_primary']"));
 
+    public SelenideElement prodPrice = $(By.xpath(".//div[@class='product__price']//span"));
+
 }
