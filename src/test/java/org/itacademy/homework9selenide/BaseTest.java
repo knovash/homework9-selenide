@@ -5,6 +5,7 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import lombok.extern.log4j.Log4j2;
 import org.itacademy.homework9selenide.utils.Config;
+import org.itacademy.homework9selenide.utils.WaitUtils;
 import org.testng.annotations.*;
 
 @Log4j2
@@ -41,5 +42,6 @@ public class BaseTest {
     @AfterTest
     public void aftertest() {
         log.info("AFTER TEST");
+        WaitUtils.waitSeconds(5);
     }
 }

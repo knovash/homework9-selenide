@@ -10,7 +10,6 @@ import org.openqa.selenium.By;
 
 import java.util.Comparator;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Log4j2
@@ -76,7 +75,7 @@ public class CheapestSteps {
     public void goToProductPage(SelenideElement minPriceElement) {
         log.info("go To Product Page");
         SelenideElement title = minPriceElement.$(By.xpath(".//*[@class='product__title-link']"));
-        WaitUtils.waitForVisibility(title, 900);
+        WaitUtils.waitForVisibility(title, 60);
         title.click();
         SelenideElement productTitle = onlinerPage.productTitle;
         WaitUtils.waitForVisibility(productTitle, 60);
@@ -85,10 +84,10 @@ public class CheapestSteps {
 
     @Step("add Product To Basket")
     public void addProductToBasket() {
-        SelenideElement tobasket = onlinerPage.buttonToBasket;
-        WaitUtils.waitForVisibility(tobasket, 60);
-        log.info("add Product To Basket: " + tobasket.isDisplayed());
-        tobasket.click();
+        SelenideElement addToBasket = onlinerPage.buttonToBasket;
+        WaitUtils.waitForVisibility(addToBasket, 60);
+        log.info("add Product To Basket: " + addToBasket.isDisplayed());
+        addToBasket.click();
     }
 
     @Step("go To Basket Page")
