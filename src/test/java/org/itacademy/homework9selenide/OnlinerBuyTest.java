@@ -26,6 +26,7 @@ public class OnlinerBuyTest extends BaseTest {
     @Test(testName = "OnlinerBuyTest")
     public void onlnerCompareTest() {
         log.info("OPEN PAGE https://catalog.onliner.by/mobile/apple/iphone14");
+
         open("https://catalog.onliner.by/mobile/apple/iphone14");
         WebDriver driver = getWebDriver();
         driver.manage().timeouts().pageLoadTimeout(600L, TimeUnit.SECONDS);

@@ -46,5 +46,6 @@ public class BaseTest {
     @AfterTest
     public void aftertest() {
         log.info("AFTER TEST");
+        WaitUtils.waitSeconds(20);
     }
 }

@@ -1,5 +1,6 @@
 package org.itacademy.homework9selenide;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Description;
@@ -7,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.itacademy.homework9selenide.utils.WaitUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -23,21 +25,23 @@ public class OnlinerCheapestProductComparatorTest extends BaseTest {
     @Description("Search item in catalog and compare first 10 items")
     @Test(testName = "CheckCompare")
     public void onlinerMinPriceTest() {
+        Configuration.pageLoadTimeout = 30000;
+        Configuration.timeout = 30000;
+
         log.info("OPEN PAGE https://www.onliner.by/");
         open("https://www.onliner.by/");
         WebDriver driver = getWebDriver();
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(1000));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
 
         SelenideElement fastSearchInput = $(By.xpath("//input[@class='fast-search__input']"));
-        WaitUtils.waitForVisibility(fastSearchInput, 900);
+        WaitUtils.waitForVisibility(fastSearchInput, 60);
         fastSearchInput.setValue("iphone 12");
         log.info("VALUE fastSearchInput: " + fastSearchInput.getValue());
 
         SelenideElement frame = $(By.xpath("//iframe[@class='modal-iframe']"));
-        WaitUtils.waitForVisibility(frame, 900);
+        WaitUtils.waitForVisibility(frame, 60);
         driver.switchTo().frame(frame);
-
-        WaitUtils.waitForVisibility($(By.xpath("//*[@class='search__result']")), 900);
+        WaitUtils.waitForVisibility($(By.xpath("//*[@class='search__result']")), 60);
 
         Comparator<SelenideElement> priceComparator = new Comparator<SelenideElement>() {
             @Override
@@ -49,30 +53,45 @@ public class OnlinerCheapestProductComparatorTest extends BaseTest {
         ElementsCollection searchResults = $$(By.xpath("//div[@class='result__item result__item_product']"));
         SelenideElement minPriceElement = searchResults
                 .stream()
+                .sorted(priceComparator)
+                .peek(element -> log.info(getPriceDouble(element)))
                 .min(priceComparator)
                 .get();
 
+        String cheapestTitle = minPriceElement.$(By.xpath(".//div[@class='product__title']")).getText();
+        String cheapestPrice = minPriceElement.$(By.xpath(".//div[@class='product__price']//span")).getText();
         log.info("MIN PRICE ELEMENT");
-        log.info("TITLE: " + minPriceElement.$(By.xpath(".//div[@class='product__title']")).getText());
-        log.info("PRICE: " + minPriceElement.$(By.xpath(".//div[@class='product__price']//span")).getText());
+        log.info("TITLE: " + cheapestTitle);
+        log.info("PRICE: " + cheapestPrice);
 
-        SelenideElement buttonOrange = minPriceElement.$(By.xpath(".//*[@class='button button_orange product__button']"));
-        WaitUtils.waitForVisibility(buttonOrange, 900);
-        buttonOrange.click();
+        SelenideElement title = minPriceElement.$(By.xpath(".//*[@class='product__title-link']"));
+        WaitUtils.waitForVisibility(title, 900);
+        log.info("TITLE CLICK");
+        title.click();
 
-        WaitUtils.waitSeconds(5);
-        SelenideElement popover = $(By.xpath("//*[contains(text(), 'Все ясно, спасибо')]"));
-        WaitUtils.waitForVisibility(popover, 30);
-        if (popover.isDisplayed()) {
-            popover.click();
-        }
+        SelenideElement productTitle = $(By.xpath(".//*[@class='catalog-masthead__title js-nav-header']"));
+        WaitUtils.waitForVisibility(productTitle, 60);
+        log.info("TITLE TEXT " + productTitle.getText());
 
-        WaitUtils.waitSeconds(5);
-        SelenideElement popover2 = $(By.xpath("//*[contains(text(), 'Ваш населенный пункт')]"));
-        if (popover2.isDisplayed()) {
-            log.info("Ваш населенный пункт");
-            $(By.xpath("//*[contains(text(), 'Ваш населенный пункт')]")).click();
-        }
+        SelenideElement tobasket = $(By.xpath("//*[contains(text(), 'В корзину')]"));
+        WaitUtils.waitForVisibility(tobasket, 60);
+        log.info("CLICK В корзину\n" + tobasket.isDisplayed());
+        tobasket.click();
+
+        SelenideElement goToBasket = $(By.xpath("//*[contains(text(), 'Перейти в корзину')]"));
+        WaitUtils.waitForVisibility(tobasket, 60);
+        log.info("CLICK Перейти в корзину\n" + goToBasket.isDisplayed());
+        goToBasket.click();
+
+        ElementsCollection inBasketItems = $$(By.xpath("//div[@class='cart-form__offers-unit cart-form__offers-unit_primary']"));
+        SelenideElement product1 = inBasketItems.get(0);
+        String basketTitle = product1.$(By.xpath(".//a[contains(@class,'cart-form__link_base-alter')]")).getText();
+        String basketPrice = product1.$(By.xpath(".//div[contains(@class,'cart-form__offers-part_price_specific')]")).getText();
+
+        log.info("PRICE " + cheapestPrice + " = " + basketPrice + "  " +  cheapestPrice.contains(basketPrice));
+        log.info("TITLE " + cheapestTitle + " = " + basketTitle + "  " + cheapestTitle.contains(basketTitle));
+
+        Assert.assertTrue(cheapestPrice.contains(basketPrice) && cheapestTitle.contains(basketTitle));
 
         WaitUtils.waitSeconds(20);
         log.info("--==TEST END==--");
