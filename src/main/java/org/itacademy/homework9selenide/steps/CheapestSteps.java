@@ -85,7 +85,7 @@ public class CheapestSteps {
 
     @Step("add Product To Basket")
     public void addProductToBasket() {
-        SelenideElement tobasket = onlinerPage.tobasket;
+        SelenideElement tobasket = onlinerPage.buttonToBasket;
         WaitUtils.waitForVisibility(tobasket, 60);
         log.info("add Product To Basket: " + tobasket.isDisplayed());
         tobasket.click();
@@ -93,7 +93,7 @@ public class CheapestSteps {
 
     @Step("go To Basket Page")
     public void goToBasketPage() {
-        SelenideElement goToBasket = onlinerPage.goToBasket;
+        SelenideElement goToBasket = onlinerPage.buttonGoToBasket;
         WaitUtils.waitForVisibility(goToBasket, 60);
         log.info("go To Basket Page: " + goToBasket.isDisplayed());
         goToBasket.click();

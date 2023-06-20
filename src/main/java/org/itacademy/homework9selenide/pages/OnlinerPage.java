@@ -17,9 +17,10 @@ public class OnlinerPage {
 
     public SelenideElement productTitle = $(By.xpath("//*[@class='catalog-masthead__title js-nav-header']"));
 
-    public SelenideElement tobasket = $(By.xpath("//*[contains(text(), 'В корзину')]"));
+    public SelenideElement buttonToBasket = $(By.xpath("//*[contains(text(), 'В корзину')]"));
 
-    public SelenideElement goToBasket = $(By.xpath("//*[contains(text(), 'Перейти в корзину')]"));
+    public SelenideElement buttonGoToBasket = $(By.xpath("//*[contains(text(), 'Перейти в корзину')]"));
 
     public ElementsCollection inBasketItems = $$(By.xpath("//div[@class='cart-form__offers-unit cart-form__offers-unit_primary']"));
+
 }
