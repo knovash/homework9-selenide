@@ -4,6 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import lombok.extern.log4j.Log4j2;
 import org.itacademy.homework9selenide.pages.OnlinerPage;
+import org.itacademy.homework9selenide.utils.PriceUtils;
 import org.itacademy.homework9selenide.utils.WaitUtils;
 import org.openqa.selenium.By;
 
@@ -42,7 +43,7 @@ public class CheapestSteps {
         Comparator<SelenideElement> priceComparator = new Comparator<SelenideElement>() {
             @Override
             public int compare(SelenideElement element1, SelenideElement element2) {
-                return getPriceDouble(element1).compareTo(getPriceDouble(element2));
+                return PriceUtils.getPriceDouble(element1).compareTo(PriceUtils.getPriceDouble(element2));
             }
         };
 
@@ -52,18 +53,9 @@ public class CheapestSteps {
         return onlinerPage.searchResults
                 .stream()
                 .sorted(priceComparator)
-                .peek(element -> log.info(getPriceDouble(element)))
+                .peek(element -> log.info(PriceUtils.getPriceDouble(element)))
                 .min(priceComparator)
                 .get();
-    }
-
-    public Double getPriceDouble(SelenideElement element) {
-        String priceText = element.$(By.xpath(".//*[@class='product__price']//span")).getText();
-        priceText = priceText
-                .replace(" р.", "")
-                .replace(" ", "")
-                .replace(",", ".");
-        return Double.valueOf(priceText);
     }
 
     @Step("get Cheapest Title Text")

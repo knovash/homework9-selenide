@@ -22,5 +22,4 @@ public class OnlinerPage {
     public SelenideElement goToBasket = $(By.xpath("//*[contains(text(), 'Перейти в корзину')]"));
 
     public ElementsCollection inBasketItems = $$(By.xpath("//div[@class='cart-form__offers-unit cart-form__offers-unit_primary']"));
-
 }

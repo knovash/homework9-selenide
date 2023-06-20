@@ -1,6 +1,5 @@
 package org.itacademy.homework9selenide;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Description;
 import lombok.extern.log4j.Log4j2;
@@ -16,15 +15,13 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Log4j2
 @Listeners
-public class OnlinerCheapestProductComparatorStepsTest extends BaseTest {
+public class OnlinerCheapestProductTest extends BaseTest {
 
     private CheapestSteps cheapestSteps;
 
-    @Description("Search item in catalog and compare first 10 items")
-    @Test(testName = "CheckCompare")
-    public void onlinerMinPriceTest() {
-        Configuration.pageLoadTimeout = 30000;
-        Configuration.timeout = 30000;
+    @Description("Find cheapest product and add to basket")
+    @Test(testName = "CheapestProduct")
+    public void cheapestProductTest() {
         log.info("OPEN https://www.onliner.by/");
         open("https://www.onliner.by/");
         cheapestSteps = new CheapestSteps();

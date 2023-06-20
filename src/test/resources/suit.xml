@@ -3,7 +3,7 @@
 <suite name="Suite 1">
     <test name="Test 1">
         <classes>
-            <class name="org.itacademy.homework9selenide.OnlinerCheapestProductComparatorStepsTest"/>
+            <class name="org.itacademy.homework9selenide.OnlinerCheapestProductTest"/>
         </classes>
     </test>
 </suite>
