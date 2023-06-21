@@ -23,6 +23,24 @@ public class OnlinerPage {
 
     public ElementsCollection inBasketItems = $$(By.xpath("//div[@class='cart-form__offers-unit cart-form__offers-unit_primary']"));
 
-    public SelenideElement prodPrice = $(By.xpath(".//div[@class='product__price']//span"));
+    public SelenideElement getElementTitle(SelenideElement se){
+        return se.$(By.xpath(".//div[@class='product__title']"));
+    }
+
+    public SelenideElement getElementPrice(SelenideElement se){
+        return se.$(By.xpath(".//div[@class='product__price']//span"));
+    }
+
+    public SelenideElement getProductLink(SelenideElement se){
+        return se.$(By.xpath(".//*[@class='product__title-link']"));
+    }
+
+    public SelenideElement getElementInBasketTitle(){
+        return inBasketItems.get(0).$(By.xpath(".//a[contains(@class,'cart-form__link_base-alter')]"));
+    }
+
+    public SelenideElement getElementInBasketPrice(){
+        return inBasketItems.get(0).$(By.xpath(".//div[contains(@class,'cart-form__offers-part_price_specific')]"));
+    }
 
 }

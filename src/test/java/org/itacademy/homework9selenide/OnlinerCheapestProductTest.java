@@ -3,6 +3,7 @@ package org.itacademy.homework9selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Description;
 import lombok.extern.log4j.Log4j2;
+import org.itacademy.homework9selenide.pages.OnlinerPage;
 import org.itacademy.homework9selenide.steps.CheapestSteps;
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
@@ -17,19 +18,23 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 @Listeners
 public class OnlinerCheapestProductTest extends BaseTest {
 
-    private CheapestSteps cheapestSteps;
+    CheapestSteps cheapestSteps = new CheapestSteps();
 
     @Description("Find cheapest product and add to basket")
     @Test()
     public void cheapestProductTest() {
+
         log.info("OPEN https://www.onliner.by/");
         open("https://www.onliner.by/");
-        cheapestSteps = new CheapestSteps();
         getWebDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+
+
 
         cheapestSteps.inputSearchValue();
         cheapestSteps.switchToFrame();
         SelenideElement cheapestProductElement = cheapestSteps.getCheapestProductElement();
+//        OnlinerPage.cheapestElement = cheapestSteps.getCheapestProductElement();
+
         String cheapestTitle = cheapestSteps.getCheapestTitleText(cheapestProductElement);
         String cheapestPrice = cheapestSteps.getCheapestPriceText(cheapestProductElement);
         cheapestSteps.goToProductPage(cheapestProductElement);
