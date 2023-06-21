@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.itacademy.homework9selenide.pages.OnlinerPage;
 import org.itacademy.homework9selenide.utils.PriceUtils;
 import org.itacademy.homework9selenide.utils.WaitUtils;
+import org.openqa.selenium.By;
 
 import java.util.Comparator;
 
@@ -54,16 +55,16 @@ public class CheapestSteps {
 
     @Step("get Cheapest Title Text")
     public String getCheapestTitleText(SelenideElement minPriceElement) {
-//        String cheapestTitle = minPriceElement.$(By.xpath(".//div[@class='product__title']")).getText();
-        String cheapestTitle = onlinerPage.getElementTitle(minPriceElement).getText();
+        String cheapestTitle = minPriceElement.$(By.xpath(".//div[@class='product__title']")).getText();
+//        String cheapestTitle = onlinerPage.getElementTitle(minPriceElement).getText();
         log.info("get Cheapest Title Text: " + cheapestTitle);
         return cheapestTitle;
     }
 
     @Step("get Cheapest Price Text")
     public String getCheapestPriceText(SelenideElement minPriceElement) {
-//        String cheapestPrice = minPriceElement.$(By.xpath(".//div[@class='product__price']//span")).getText();
-        String cheapestPrice = onlinerPage.getElementPrice(minPriceElement).getText();
+        String cheapestPrice = minPriceElement.$(By.xpath(".//div[@class='product__price']//span")).getText();
+//        String cheapestPrice = onlinerPage.getElementPrice(minPriceElement).getText();
         log.info("get Cheapest Price Text: " + cheapestPrice);
         return cheapestPrice;
     }
@@ -71,8 +72,8 @@ public class CheapestSteps {
     @Step("go To Product Page")
     public void goToProductPage(SelenideElement minPriceElement) {
         log.info("go To Product Page");
-//        SelenideElement link = minPriceElement.$(By.xpath(".//*[@class='product__title-link']"));
-        SelenideElement link = onlinerPage.getProductLink(minPriceElement);
+        SelenideElement link = minPriceElement.$(By.xpath(".//*[@class='product__title-link']"));
+//        SelenideElement link = onlinerPage.getProductLink(minPriceElement);
         WaitUtils.waitForVisibility(link, 60);
         link.click();
         log.info("wait for product page title...");
@@ -99,13 +100,13 @@ public class CheapestSteps {
 
     @Step("get Basket Product Title")
     public String getBasketProductTitle() {
-//        return onlinerPage.inBasketItems.get(0).$(By.xpath(".//a[contains(@class,'cart-form__link_base-alter')]")).getText();
-        return onlinerPage.getElementInBasketTitle().getText();
+        return onlinerPage.inBasketItems.get(0).$(By.xpath(".//a[contains(@class,'cart-form__link_base-alter')]")).getText();
+//        return onlinerPage.getElementInBasketTitle().getText();
     }
 
     @Step("get Basket Product Price")
     public String getBasketProductPrice() {
-//        return onlinerPage.inBasketItems.get(0).$(By.xpath(".//div[contains(@class,'cart-form__offers-part_price_specific')]")).getText();
-        return onlinerPage.getElementInBasketPrice().getText();
+        return onlinerPage.inBasketItems.get(0).$(By.xpath(".//div[contains(@class,'cart-form__offers-part_price_specific')]")).getText();
+//        return onlinerPage.getElementInBasketPrice().getText();
     }
 }
