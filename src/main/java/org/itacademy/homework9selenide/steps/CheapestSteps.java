@@ -3,6 +3,7 @@ package org.itacademy.homework9selenide.steps;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import lombok.extern.log4j.Log4j2;
+import org.itacademy.homework9selenide.pages.Element;
 import org.itacademy.homework9selenide.pages.OnlinerPage;
 import org.itacademy.homework9selenide.utils.PriceUtils;
 import org.itacademy.homework9selenide.utils.WaitUtils;
@@ -10,12 +11,14 @@ import org.openqa.selenium.By;
 
 import java.util.Comparator;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Log4j2
 public class CheapestSteps {
 
     OnlinerPage onlinerPage = new OnlinerPage();
+
 
     @Step("input Search Value")
     public void inputSearchValue() {
@@ -48,21 +51,29 @@ public class CheapestSteps {
         SelenideElement result = onlinerPage.searchResults
                 .stream()
                 .peek(element -> log.info(PriceUtils.getPriceDouble(element)))
+                .sorted(priceComparator)
                 .min(priceComparator)
                 .get();
+//        onlinerPage.inElement = result;
+//        log.info("\nRESULT\n" + result.getAttribute("outerHTML"));
+//        log.info("\ninELEMENT\n" + onlinerPage.inElement.getAttribute("outerHTML"));
+        Element.inElement = result;
         return result;
     }
 
     @Step("get Cheapest Title Text")
     public String getCheapestTitleText(SelenideElement minPriceElement) {
-        String cheapestTitle = minPriceElement.$(By.xpath(".//div[@class='product__title']")).getText();
-//        String cheapestTitle = onlinerPage.getElementTitle(minPriceElement).getText();
+        log.info("get Cheapest Title Text");
+//        String cheapestTitle = minPriceElement.$(By.xpath(".//div[@class='product__title']")).getText();
+        log.info("\ninELEMENT\n" + Element.inElement.getAttribute("outerHTML"));
+        String cheapestTitle = onlinerPage.getElementTitle.getText();
         log.info("get Cheapest Title Text: " + cheapestTitle);
         return cheapestTitle;
     }
 
     @Step("get Cheapest Price Text")
     public String getCheapestPriceText(SelenideElement minPriceElement) {
+        log.info("get Cheapest Price Text");
         String cheapestPrice = minPriceElement.$(By.xpath(".//div[@class='product__price']//span")).getText();
 //        String cheapestPrice = onlinerPage.getElementPrice(minPriceElement).getText();
         log.info("get Cheapest Price Text: " + cheapestPrice);

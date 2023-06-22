@@ -4,6 +4,8 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 
+import java.util.Optional;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -22,5 +24,9 @@ public class OnlinerPage {
     public SelenideElement buttonGoToBasket = $(By.xpath("//*[contains(text(), 'Перейти в корзину')]"));
 
     public ElementsCollection inBasketItems = $$(By.xpath("//div[@class='cart-form__offers-unit cart-form__offers-unit_primary']"));
+
+    public SelenideElement inElement;
+
+    public SelenideElement getElementTitle = inElement.$(By.xpath(".//*[@class='product__title-link']"));
 
 }
