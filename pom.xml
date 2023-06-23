@@ -16,7 +16,6 @@
         <projectlombok-version>1.18.28</projectlombok-version>
         <fasterxml-jackson-core-version>2.10.0</fasterxml-jackson-core-version>
         <qameta-allure-version>2.22.1</qameta-allure-version>
-
         <java-version>11</java-version>
         <maven-surefire-plugin-version>3.1.0</maven-surefire-plugin-version>
         <maven-compiler-plugin-version>3.11.0</maven-compiler-plugin-version>
@@ -83,13 +82,11 @@
             <artifactId>allure-java-commons</artifactId>
             <version>${qameta-allure-version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-selenide -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-selenide</artifactId>
             <version>${qameta-allure-version}</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -126,5 +123,4 @@
             </plugin>
         </plugins>
     </build>
-    
 </project>
